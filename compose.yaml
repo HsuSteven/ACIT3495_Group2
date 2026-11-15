@@ -34,7 +34,7 @@ services:
       HASH_SALT: "6b4b8429e3a4bc457af19bd653de5ce5"
 
   # ----------------------------------------------------
-  # Enter Data Web App (Member 1)
+  # Enter Data Web App
   # ----------------------------------------------------
   enter_data:
     build:
@@ -66,7 +66,7 @@ services:
           cpus: '0.25'
           memory: 128M
 
-  # ----------------------------------------------------
+# ----------------------------------------------------
   # Show Results Web App (Member 3)
   # ----------------------------------------------------
   show_results:
@@ -78,6 +78,7 @@ services:
     environment:
       AUTH_URL: http://auth:8000
       MONGO_URI: mongodb://bcit:acit3495@mongo:27017/db?authSource=admin
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET must be set in .env}
     ports:
       - "3001:3001"
     networks:
@@ -85,7 +86,7 @@ services:
       - analytics-net
 
   # ----------------------------------------------------
-  # Analytics Service (Your Component)
+  # Analytics Service 
   # ----------------------------------------------------
   analytics:
     build:

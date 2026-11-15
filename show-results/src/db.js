@@ -1,26 +1,22 @@
-import { MongoClient } from "mongodb";
+const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
+const dbName = process.env.MONGO_DATABASE || "db";
+const collectionName = process.env.MONGO_COLLECTION || "grade_analytics";
 
 async function fetchMongoData() {
+  const client = new MongoClient(uri);
   try {
-    // Connect to the MongoDB cluster
     await client.connect();
-    console.log("Successfully connected to MongoDB!");
-
-    // Specify the database you want to use
-    const db = client.db("analyticsdb");
-    const collection = db.collection("grade_analytics");
-    const query = {};
-    const cursor = collection.find(query);
-    const documents = await cursor.toArray();
-    return documents;
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+    return await collection.find({}).toArray();
   } catch (error) {
     console.error("There was an error fetching data from mongoDB", error);
+    return [];
   } finally {
     await client.close();
   }
 }
 
-export { fetchMongoData };
+module.exports = { fetchMongoData };
